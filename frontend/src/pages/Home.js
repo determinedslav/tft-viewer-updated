@@ -73,34 +73,35 @@ const Home = () => {
             const responseName = await Remote.get(requestNameLink);
             if(responseName && responseName.hasOwnProperty('data')){
                 const newPlayer =  {
-                        region: regionFull,
-                        name: responseName.data.name,
-                        level: responseName.data.summonerLevel,
-                        id: responseName.data.id,
-                        puuid: responseName.data.puuid,
-                    }
+                    region: regionFull,
+                    name: responseName.data.name,
+                    level: responseName.data.summonerLevel,
+                    id: responseName.data.id,
+                    puuid: responseName.data.puuid,
+                }
                 //Sets the currently found player
                 dispatch(setPlayer(newPlayer));
                 //Calls the getStatsBySummonerId API     
                 const requestStatsLink = API.protocol + region + API.apiLink + API.statsBySummonerId + responseName.data.id + API.key + API.keyValue;
                 const responseStats = await Remote.get(requestStatsLink);
                     if(responseStats && responseStats.hasOwnProperty('data')){
-                        const newStats = responseStats.data.map(item=>{
-                            return {
-                                rank: item.tier,
-                                division: item.rank,
-                                wins: item.wins,
-                                loses: item.losses,
-                                played: item.wins + item.losses,
-                                lp: item.leaguePoints,
-                            }
-                        });
                         if (responseStats.data.length === 0) {
                             setErrorMessage("No TFT information available for this player");
                             dispatch(setLoading(false));
-                        }
-                        //Sets the currently found TFT information about the previously set player
-                        dispatch(setStats(newStats));             
+                        } else {
+                            const newStats = responseStats.data.map(item=>{
+                                return {
+                                    rank: item.tier,
+                                    division: item.rank,
+                                    wins: item.wins,
+                                    loses: item.losses,
+                                    played: item.wins + item.losses,
+                                    lp: item.leaguePoints,
+                                }
+                            });
+                            //Sets the currently found TFT information about the previously set player
+                            dispatch(setStats(newStats));  
+                        }           
                     }
                     //Calls the getMatchesByPuuid APi
                     const requestHistoryLink = API.protocol + API.europe + API.apiLink + API.matchesByPuuid + responseName.data.puuid + API.matchesParams + API.keyValue;
