@@ -69,8 +69,8 @@ const Home = () => {
     const getResponse = async () => {
         try{
             //Calls the getSummonerByName API  
-            const requestNameLink = API.protocol + region + API.apiLink + API.nameByName + name + API.key + API.keyValue;
-            const responseName = await Remote.get(requestNameLink);
+            const requestNameURL = API.protocol + region + API.apiURL + API.nameByName + name + API.key + API.keyValue;
+            const responseName = await Remote.get(requestNameURL);
             if(responseName && responseName.hasOwnProperty('data')){
                 const newPlayer =  {
                     region: regionFull,
@@ -82,60 +82,60 @@ const Home = () => {
                 //Sets the currently found player
                 dispatch(setPlayer(newPlayer));
                 //Calls the getStatsBySummonerId API     
-                const requestStatsLink = API.protocol + region + API.apiLink + API.statsBySummonerId + responseName.data.id + API.key + API.keyValue;
-                const responseStats = await Remote.get(requestStatsLink);
-                    if(responseStats && responseStats.hasOwnProperty('data')){
-                        if (responseStats.data.length === 0) {
-                            setErrorMessage("No TFT information available for this player");
-                            dispatch(setLoading(false));
-                        } else {
-                            const newStats = responseStats.data.map(item=>{
-                                return {
-                                    rank: item.tier,
-                                    division: item.rank,
-                                    wins: item.wins,
-                                    loses: item.losses,
-                                    played: item.wins + item.losses,
-                                    lp: item.leaguePoints,
-                                }
-                            });
-                            //Sets the currently found TFT information about the previously set player
-                            dispatch(setStats(newStats));  
-                        }           
-                    }
-                    //Calls the getMatchesByPuuid APi
-                    const requestHistoryLink = API.protocol + API.europe + API.apiLink + API.matchesByPuuid + responseName.data.puuid + API.matchesParams + API.keyValue;
-                    const responseHistory = await Remote.get(requestHistoryLink);
-                    if(responseHistory && responseHistory.hasOwnProperty('data')){
-                        //For each found match id call the getMatchByMatchId API
-                        responseHistory.data.map(async item=> {
-                            const requestMatchLink = API.protocol + API.europe + API.apiLink + API.matchByMatchId + item + API.key + API.keyValue;
-                            const responseMatch = await Remote.get(requestMatchLink);
-                            if(responseMatch && responseMatch.hasOwnProperty('data')){
-                                // eslint-disable-next-line
-                                responseMatch.data.info.participants.map(item=> {
-                                    if (item.puuid === responseName.data.puuid){
-                                        const newMatch =  {
-                                            dateTime: responseMatch.data.info.game_datetime,
-                                            queueId: responseMatch.data.info.queue_id,
-                                            placement: item.placement,
-                                            level: item.level,
-                                            lastRound: item.last_round,
-                                            playersEliminated: item.players_eliminated,
-                                            totalDamageToPlayers: item.total_damage_to_players,
-                                            traits: item.traits,
-                                            units: item.units,
-                                        }
-                                        //Pushed each found match into an array
-                                        matches.push(newMatch);
-                                    }
-                                });
-                                //If all requests have been executed redirects user to the match history page
-                                history.push('/match');
+                const requestStatsURL = API.protocol + region + API.apiURL + API.statsBySummonerId + responseName.data.id + API.key + API.keyValue;
+                const responseStats = await Remote.get(requestStatsURL);
+                if(responseStats && responseStats.hasOwnProperty('data')){
+                    if (responseStats.data.length === 0) {
+                        setErrorMessage("No TFT information available for this player");
+                        dispatch(setLoading(false));
+                    } else {
+                        const newStats = responseStats.data.map(item=>{
+                            return {
+                                rank: item.tier,
+                                division: item.rank,
+                                wins: item.wins,
+                                loses: item.losses,
+                                played: item.wins + item.losses,
+                                lp: item.leaguePoints,
                             }
-                        });               
-                    } 
+                        });
+                        //Sets the currently found TFT information about the previously set player
+                        dispatch(setStats(newStats));
+                        //Calls the getMatchesByPuuid APi
+                        const requestHistoryURL = API.protocol + API.europe + API.apiURL + API.matchesByPuuid + responseName.data.puuid + API.matchesParams + API.keyValue;
+                        const responseHistory = await Remote.get(requestHistoryURL);
+                        if(responseHistory && responseHistory.hasOwnProperty('data')){
+                            //For each found match id call the getMatchByMatchId API
+                            responseHistory.data.map(async item=> {
+                                const requestMatchURL = API.protocol + API.europe + API.apiURL + API.matchByMatchId + item + API.key + API.keyValue;
+                                const responseMatch = await Remote.get(requestMatchURL);
+                                if(responseMatch && responseMatch.hasOwnProperty('data')){
+                                    // eslint-disable-next-line
+                                    responseMatch.data.info.participants.map(item=> {
+                                        if (item.puuid === responseName.data.puuid){
+                                            const newMatch =  {
+                                                dateTime: responseMatch.data.info.game_datetime,
+                                                queueId: responseMatch.data.info.queue_id,
+                                                placement: item.placement,
+                                                level: item.level,
+                                                lastRound: item.last_round,
+                                                playersEliminated: item.players_eliminated,
+                                                totalDamageToPlayers: item.total_damage_to_players,
+                                                traits: item.traits,
+                                                units: item.units,
+                                            }
+                                            //Pushed each found match into an array
+                                            matches.push(newMatch);
+                                        }
+                                    });
+                                    //If all requests have been executed redirects user to the match history page
+                                    history.push('/match');
+                                }
+                            });               
+                        }  
+                    }           
                 } 
+            } 
         } catch (error) {
             console.log(error);
             setErrorMessage("Failed to find a player with this name in this region; Player does not exist or some error has occured");
