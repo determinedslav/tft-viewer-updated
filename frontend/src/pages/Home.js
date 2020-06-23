@@ -50,6 +50,7 @@ const Home = () => {
     }
 
     const handleRequest = () => {
+        setErrorMessage(" ");
         dispatch(setLoading(true));
         getResponse();
         //Allows the application enough time to sort the matches properly
@@ -66,8 +67,6 @@ const Home = () => {
 
     //Executes all API requests for the application
     const getResponse = async () => {
-        setErrorMessage(" ");
-        dispatch(setLoading(true));
         try{
             //Calls the getSummonerByName API  
             const requestNameLink = API.protocol + region + API.apiLink + API.nameByName + name + API.key + API.keyValue;
