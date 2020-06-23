@@ -45,19 +45,23 @@ const Home = () => {
         } else if (name.length < 4 || name.length > 16) {
             setErrorMessage("Summoner names are between 4 and 16 symbols long");
         } else {
-            dispatch(setLoading(true));
-            getResponse();
-            //Allows the application enough time to sort the matches properly
-            setTimeout(()=>{
-                //Sorts all found matches by descending date before dispatching
-                matches.sort(dynamicSort("dateTime"));
-                console.log(matches);
-                dispatch(setMatch(matches));
-                //Removes match index from potential previous player statistics viewed
-                dispatch(setMatchIndex(' '));
-                dispatch(setLoading(false));
-            },2000);  
+            handleRequest();
         }
+    }
+
+    const handleRequest = () => {
+        dispatch(setLoading(true));
+        getResponse();
+        //Allows the application enough time to sort the matches properly
+        setTimeout(()=>{
+            //Sorts all found matches by descending date before dispatching
+            matches.sort(dynamicSort("dateTime"));
+            console.log(matches);
+            dispatch(setMatch(matches));
+            //Removes match index from potential previous player statistics viewed
+            dispatch(setMatchIndex(' '));
+            dispatch(setLoading(false));
+        },2000); 
     }
 
     //Executes all API requests for the application
