@@ -55,12 +55,14 @@ const Home = () => {
         getResponse();
         //Allows the application enough time to sort the matches properly
         setTimeout(()=>{
-            //Sorts all found matches by descending date before dispatching
-            matches.sort(dynamicSort("dateTime"));
-            console.log(matches);
-            dispatch(setMatch(matches));
-            //Removes match index from potential previous player statistics viewed
-            dispatch(setMatchIndex(' '));
+            if (matches.length !== 0) {
+                //Sorts all found matches by descending date before dispatching
+                matches.sort(dynamicSort("dateTime"));
+                console.log(matches);
+                dispatch(setMatch(matches));
+                //Removes match index from potential previous player statistics viewed
+                dispatch(setMatchIndex(' '));
+            }
             dispatch(setLoading(false));
         },2000); 
     }
