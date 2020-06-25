@@ -62,6 +62,8 @@ const Home = () => {
                 dispatch(setMatch(matches));
                 //Removes match index from potential previous player statistics viewed
                 dispatch(setMatchIndex(' '));
+                //If all requests have been executed redirects user to the match history page
+                history.push('/match');
             }
             dispatch(setLoading(false));
         },2000); 
@@ -131,8 +133,6 @@ const Home = () => {
                                             matches.push(newMatch);
                                         }
                                     });
-                                    //If all requests have been executed redirects user to the match history page
-                                    history.push('/match');
                                 }
                             });               
                         }  
