@@ -9,6 +9,7 @@ import {setMatch} from '../redux/actions/match';
 import {setMatchIndex} from '../redux/actions/matchIndex';
 import API from '../constants/API';
 import Remote from '../remote';
+import RiotAPIManager from '../components/RiotAPIManager';
 
 const Home = () => {    
 
@@ -45,8 +46,16 @@ const Home = () => {
         } else if (name.length < 4 || name.length > 16) {
             setErrorMessage("Summoner names are between 4 and 16 symbols long");
         } else {
+            teeto();
             handleRequest();
         }
+    }
+
+    const teeto = async () => {
+        const response = await RiotAPIManager.getPlayer(name, region, regionFull);
+        console.log(response);
+        dispatch(setPlayer(response.newPlayer));
+        dispatch(setStats(response.newStats));
     }
 
     const handleRequest = () => {
@@ -84,7 +93,7 @@ const Home = () => {
                     puuid: responseName.data.puuid,
                 }
                 //Sets the currently found player
-                dispatch(setPlayer(newPlayer));
+                //dispatch(setPlayer(newPlayer));
                 //Calls the getStatsBySummonerId API     
                 const requestStatsURL = API.protocol + region + API.apiURL + API.statsBySummonerId + responseName.data.id + API.key + API.keyValue;
                 const responseStats = await Remote.get(requestStatsURL);
@@ -104,7 +113,7 @@ const Home = () => {
                             }
                         });
                         //Sets the currently found TFT information about the previously set player
-                        dispatch(setStats(newStats));
+                        //dispatch(setStats(newStats));
                         //Calls the getMatchesByPuuid APi
                         const requestHistoryURL = API.protocol + API.europe + API.apiURL + API.matchesByPuuid + responseName.data.puuid + API.matchesParams + API.keyValue;
                         const responseHistory = await Remote.get(requestHistoryURL);
