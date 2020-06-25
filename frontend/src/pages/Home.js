@@ -54,14 +54,18 @@ const Home = () => {
     const teeto = async () => {
         const response = await RiotAPIManager.getPlayer(name, region, regionFull);
         console.log(response);
-        dispatch(setPlayer(response.newPlayer));
-        dispatch(setStats(response.newStats));
+        if(response && response.hasOwnProperty('newPlayer')){
+            dispatch(setPlayer(response.newPlayer));
+            dispatch(setStats(response.newStats));
+        } else {
+            setErrorMessage(response);
+        }
     }
 
     const handleRequest = () => {
         setErrorMessage(" ");
         dispatch(setLoading(true));
-        getResponse();
+        //getResponse();
         //Allows the application enough time to sort the matches properly
         setTimeout(()=>{
             if (matches.length !== 0) {

@@ -30,7 +30,7 @@ export default {
                 const responseStats = await Remote.get(requestStatsURL);
                 if(responseStats && responseStats.hasOwnProperty('data')){
                     if (responseStats.data.length === 0) {
-                        console.log("err");
+                        return "No TFT information available for this player";
                     } else {
                         newStats = responseStats.data.map(item=>{
                             return {
@@ -48,6 +48,15 @@ export default {
             return {newPlayer, newStats};
         } catch (error) {
             console.log(error);
+            return "Failed to find a player with this name in this region; Player does not exist or some error has occured"
         } 
+    },
+
+    async getMatches() {
+        try{
+
+        } catch (error) {
+            console.log(error);
+        }
     }
 }
