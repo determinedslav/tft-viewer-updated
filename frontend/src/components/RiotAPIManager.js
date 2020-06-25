@@ -8,10 +8,6 @@ import Remote from '../remote';
 
 export default {
 
-    testoo(){
-        console.log("tetoometo");
-    },
-
     async getPlayer(name, region, regionFull){
         try{
             let newPlayer;
@@ -44,19 +40,51 @@ export default {
                         });
                     }
                 }
+                return {newPlayer, newStats};
             }
-            return {newPlayer, newStats};
         } catch (error) {
             console.log(error);
             return "Failed to find a player with this name in this region; Player does not exist or some error has occured"
         } 
     },
 
-    async getMatches() {
+    async getMatches(player) {
         try{
-
+            let matches = [];
+            const requestHistoryURL = API.protocol + API.europe + API.apiURL + API.matchesByPuuid + player.puuid + API.matchesParams + API.keyValue;
+            const responseHistory = await Remote.get(requestHistoryURL);
+            if(responseHistory && responseHistory.hasOwnProperty('data')){
+                //For each found match id call the getMatchByMatchId API
+                responseHistory.data.map(async item=> {
+                    const requestMatchURL = API.protocol + API.europe + API.apiURL + API.matchByMatchId + item + API.key + API.keyValue;
+                    const responseMatch = await Remote.get(requestMatchURL);
+                    if(responseMatch && responseMatch.hasOwnProperty('data')){
+                        // eslint-disable-next-line
+                        responseMatch.data.info.participants.map(item=> {
+                            if (item.puuid === player.puuid){
+                                const newMatch =  {
+                                    dateTime: responseMatch.data.info.game_datetime,
+                                    queueId: responseMatch.data.info.queue_id,
+                                    galaxy: responseMatch.data.info.game_variation,
+                                    placement: item.placement,
+                                    level: item.level,
+                                    lastRound: item.last_round,
+                                    playersEliminated: item.players_eliminated,
+                                    totalDamageToPlayers: item.total_damage_to_players,
+                                    traits: item.traits,
+                                    units: item.units,
+                                }
+                                //Pushed each found match into an array
+                                matches.push(newMatch);
+                            }
+                        });
+                    }
+                });
+                return matches;               
+            }
         } catch (error) {
             console.log(error);
+            return "Failed to find matches for this player"
         }
     }
 }

@@ -52,13 +52,15 @@ const Home = () => {
     }
 
     const teeto = async () => {
-        const response = await RiotAPIManager.getPlayer(name, region, regionFull);
-        console.log(response);
-        if(response && response.hasOwnProperty('newPlayer')){
-            dispatch(setPlayer(response.newPlayer));
-            dispatch(setStats(response.newStats));
+        const responsePlayer = await RiotAPIManager.getPlayer(name, region, regionFull);
+        console.log(responsePlayer);
+        if(responsePlayer && responsePlayer.hasOwnProperty('newPlayer')){
+            dispatch(setPlayer(responsePlayer.newPlayer));
+            dispatch(setStats(responsePlayer.newStats));
+            const responseMatches = await RiotAPIManager.getMatches(responsePlayer.newPlayer);
+            console.log(responseMatches);
         } else {
-            setErrorMessage(response);
+            setErrorMessage(responsePlayer);
         }
     }
 
