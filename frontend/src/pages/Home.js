@@ -118,6 +118,7 @@ const Home = () => {
                                             const newMatch =  {
                                                 dateTime: responseMatch.data.info.game_datetime,
                                                 queueId: responseMatch.data.info.queue_id,
+                                                galaxy: responseMatch.data.info.game_variation,
                                                 placement: item.placement,
                                                 level: item.level,
                                                 lastRound: item.last_round,
