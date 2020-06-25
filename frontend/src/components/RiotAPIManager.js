@@ -1,8 +1,3 @@
-import React, {useState} from 'react';
-import {useSelector, useDispatch} from "react-redux";
-import {setStats} from '../redux/actions/stats';
-import {setPlayer} from '../redux/actions/player';
-import {setLoading} from '../redux/actions/loading';
 import API from '../constants/API';
 import Remote from '../remote';
 
@@ -84,7 +79,6 @@ export default {
             }
         } catch (error) {
             console.log(error);
-            return "Failed to find matches for this player"
         }
     }
 }

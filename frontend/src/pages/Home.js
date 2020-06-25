@@ -7,8 +7,6 @@ import {setPlayer} from '../redux/actions/player';
 import {setLoading} from '../redux/actions/loading';
 import {setMatch} from '../redux/actions/match';
 import {setMatchIndex} from '../redux/actions/matchIndex';
-import API from '../constants/API';
-import Remote from '../remote';
 import RiotAPIManager from '../components/RiotAPIManager';
 
 const Home = () => {    
@@ -18,7 +16,7 @@ const Home = () => {
     const [name, setName] = useState(' ');
     const [errorMessage, setErrorMessage] = useState(' ');
 
-    const [matches] = useState([]);
+    //const [matches] = useState([]);
 
     const isLoading = useSelector(state => state.loading);
 
@@ -46,12 +44,13 @@ const Home = () => {
         } else if (name.length < 4 || name.length > 16) {
             setErrorMessage("Summoner names are between 4 and 16 symbols long");
         } else {
-            teeto();
             handleRequest();
         }
     }
 
-    const teeto = async () => {
+    const handleRequest = async () => {
+        setErrorMessage(" ");
+        dispatch(setLoading(true));
         const responsePlayer = await RiotAPIManager.getPlayer(name, region, regionFull);
         console.log(responsePlayer);
         if(responsePlayer && responsePlayer.hasOwnProperty('newPlayer')){
@@ -59,15 +58,14 @@ const Home = () => {
             dispatch(setStats(responsePlayer.newStats));
             const responseMatches = await RiotAPIManager.getMatches(responsePlayer.newPlayer);
             console.log(responseMatches);
+            handleMatches(responseMatches);
         } else {
             setErrorMessage(responsePlayer);
+            dispatch(setLoading(false));
         }
     }
 
-    const handleRequest = () => {
-        setErrorMessage(" ");
-        dispatch(setLoading(true));
-        //getResponse();
+    const handleMatches = (matches) => {
         //Allows the application enough time to sort the matches properly
         setTimeout(()=>{
             if (matches.length !== 0) {
@@ -84,7 +82,7 @@ const Home = () => {
         },2000); 
     }
 
-    //Executes all API requests for the application
+    /*Executes all API requests for the application
     const getResponse = async () => {
         try{
             //Calls the getSummonerByName API  
@@ -145,7 +143,7 @@ const Home = () => {
                                                 units: item.units,
                                             }
                                             //Pushed each found match into an array
-                                            matches.push(newMatch);
+                                            //matches.push(newMatch);
                                         }
                                     });
                                 }
@@ -160,7 +158,7 @@ const Home = () => {
             dispatch(setLoading(false));
         } 
     };
-
+    */
     const dynamicSort = property => {
         var sortOrder = -1;
         if(property[0] === "-") {
