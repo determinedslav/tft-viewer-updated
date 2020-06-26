@@ -79,7 +79,7 @@ const Home = () => {
                 history.push('/match');
             }
             dispatch(setLoading(false));
-        },2000); 
+        },500); 
     }
 
     /*Executes all API requests for the application

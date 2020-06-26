@@ -1,8 +1,6 @@
 import API from '../constants/API';
 import Remote from '../remote';
 
-let matches = [];
-
 async function getPlayer(name, region, regionFull){
     try{
         let newPlayer;
@@ -45,6 +43,7 @@ async function getPlayer(name, region, regionFull){
 
 async function getMatches(player) {
     try{
+        let matches = [];
         const requestHistoryURL = API.protocol + API.europe + API.apiURL + API.matchesByPuuid + player.puuid + API.matchesParams + API.keyValue;
         const responseHistory = await Remote.get(requestHistoryURL);
         if(responseHistory && responseHistory.hasOwnProperty('data')){
@@ -80,19 +79,6 @@ async function getMatches(player) {
         console.log(error);
     }
 };
-
-
-function dynamicSort (property) {
-    var sortOrder = -1;
-    if(property[0] === "-") {
-        sortOrder = 1;
-        property = property.substr(1);
-    }
-    return function (a,b) {
-        var result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
-        return result * sortOrder;
-    }
-}
 
 export default {
     getPlayer,
