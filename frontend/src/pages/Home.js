@@ -1,7 +1,8 @@
 import React, {useState} from 'react';
 import {useSelector, useDispatch} from "react-redux";
 import { useHistory } from "react-router-dom";
-import LoadingSplash from '../components/LoadingSplash'
+import LoadingSplash from '../components/LoadingSplash';
+import DynamicSort from '../components/js/DynamicSort';
 import {setStats} from '../redux/actions/stats';
 import {setPlayer} from '../redux/actions/player';
 import {setLoading} from '../redux/actions/loading';
@@ -15,8 +16,6 @@ const Home = () => {
     const [regionFull, setRegionFull] = useState(' ');
     const [name, setName] = useState(' ');
     const [errorMessage, setErrorMessage] = useState(' ');
-
-    //const [matches] = useState([]);
 
     const isLoading = useSelector(state => state.loading);
 
@@ -68,7 +67,7 @@ const Home = () => {
         setTimeout(()=>{
             if (matches.length !== 0) {
                 //Sorts all found matches by descending date before dispatching
-                matches.sort(dynamicSort("dateTime"));
+                matches.sort(DynamicSort.sortMatches("dateTime"));
                 console.log(matches);
                 dispatch(setMatch(matches));
                 //Removes match index from potential previous player statistics viewed
@@ -78,18 +77,6 @@ const Home = () => {
             }
             dispatch(setLoading(false));
         },2000); 
-    }
-
-    const dynamicSort = property => {
-        var sortOrder = -1;
-        if(property[0] === "-") {
-            sortOrder = 1;
-            property = property.substr(1);
-        }
-        return function (a,b) {
-            var result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
-            return result * sortOrder;
-        }
     }
 
     //Home page render
