@@ -85,6 +85,11 @@ const Details = () => {
                             </div>
                             <div className="row mb-1 mt-4 border-bottom">
                                 <div className="col-md-6 mb-2">
+                                    Glaxy: {match.galaxy}
+                                </div>
+                            </div>
+                            <div className="row mb-1 mt-4 border-bottom">
+                                <div className="col-md-6 mb-2">
                                     Round reached: {match.lastRound}
                                 </div>
                                 <div className="col-md-6 mb-2">
