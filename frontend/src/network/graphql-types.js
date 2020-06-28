@@ -34,13 +34,13 @@ EDIT_USER_PASSWORD: gql`
 `,
 
 ADD_FRIEND: gql`
-    mutation AddFriend($email: String!, $friend: FriendInput!) {
+    mutation AddFriend($email: String!, $friend: RiotAccoutInput!) {
         addFriend(email: $email, friend: $friend){friends{name, region}}
     }
 `,
 
 REMOVE_FRIEND: gql`
-    mutation RemoveFriend($email: String!, $friend: FriendInput!) {
+    mutation RemoveFriend($email: String!, $friend: RiotAccoutInput!) {
         removeFriend(email: $email, friend: $friend){friends{name, region}}
     }
 `,
