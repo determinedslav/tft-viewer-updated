@@ -30,7 +30,7 @@ export default `
         addFriend(email: String!, friend: FriendInput!): User
         login(email: String!, password: String!): String
         deleteUser(email: String!): User
-        removeFriend(email: String!, friend: String!): User
+        removeFriend(email: String!, friend: FriendInput!): User
         editUserUsername(email: String!, username: String!): User
         editUserPassword(email: String!, oldPassword: String!, password: String!): User
     }
