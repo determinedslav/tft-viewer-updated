@@ -1,7 +1,13 @@
 export default `
 
+    input FriendInput {
+        name: String!
+        region: String!
+    }
+
     type Friend {
-        friend(username: String!, password: String!): Friend
+        name: String
+        region: String
     }
 
     type User {
@@ -9,7 +15,7 @@ export default `
         username: String!
         email: String!
         password: String!
-        friends: [String]
+        friends: [Friend]
     }
 
     type Query {
@@ -21,7 +27,7 @@ export default `
 
     type Mutation {
         addUser(username: String!, email: String!, password: String!): User
-        addFriend(email: String, friend: String!): User
+        addFriend(email: String!, friend: FriendInput!): User
         login(email: String!, password: String!): String
         deleteUser(email: String!): User
         removeFriend(email: String!, friend: String!): User

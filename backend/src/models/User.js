@@ -16,9 +16,16 @@ const UserSchema = new Schema({
         type: String,
         required: true
     },
-    friends: {
-        type: [String]
-    }
+    friends: [{
+        name: {
+            type: String, 
+            required: true
+        }, 
+        region: {
+            type: String, 
+            required: true
+        }
+    }]
 })
 
 const User = mongoose.model("User", UserSchema);
