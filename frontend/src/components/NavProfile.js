@@ -42,7 +42,7 @@ const NavProfile = props => {
                     <select id="selectFriend" defaultValue = "0" className="form-control-sm">
                         <option value="0" disabled>Saved players</option>
                         {loggedUserFriends.map((friend, i) => {
-                            return <option key={i} value={friend}>{friend}</option>
+                            return <option key={i} value={friend}>{friend.name + "#" + friend.region}</option>
                         })}
                     </select>
                 </div>

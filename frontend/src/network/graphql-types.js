@@ -8,7 +8,7 @@ GET_USERS: gql`
 GET_USER: gql`
     query Login($email: String!, $password: String!) {
         login(email: $email, password: $password) {
-            username, email, friends
+            username, email, friends{name, region}
         }
     }
 `,
@@ -16,7 +16,7 @@ GET_USER: gql`
 ADD_USER: gql`
     mutation AddUser($email: String!, $username: String!, $password: String!) {
         addUser(email: $email, username: $username, password: $password) {
-            username, email, friends
+            username, email, friends{name, region}
         }
     }
 `,
@@ -34,14 +34,14 @@ EDIT_USER_PASSWORD: gql`
 `,
 
 ADD_FRIEND: gql`
-    mutation AddFriend($email: String!, $friend: String!) {
-        addFriend(email: $email, friend: $friend){friends}
+    mutation AddFriend($email: String!, $friend: FriendInput!) {
+        addFriend(email: $email, friend: $friend){friends{name, region}}
     }
 `,
 
 REMOVE_FRIEND: gql`
-    mutation RemoveFriend($email: String!, $friend: String!) {
-        removeFriend(email: $email, friend: $friend){friends}
+    mutation RemoveFriend($email: String!, $friend: FriendInput!) {
+        removeFriend(email: $email, friend: $friend){friends{name, region}}
     }
 `,
 

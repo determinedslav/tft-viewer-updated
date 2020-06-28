@@ -44,6 +44,10 @@ const Profile = () => {
         history.push('/')
     }
 
+    const loadFriend = (friend) => {
+
+    }
+
     const validateUsername = () => {
         if (username === ' ') {
             return;
@@ -67,7 +71,6 @@ const Profile = () => {
         } else if (newPassword === password) {
             setErrorMessagePass("New password cannot be the same as old password");
         } else {
-            console.log("do stuff");
             editUserPassword();
         }
     }
@@ -239,9 +242,9 @@ const Profile = () => {
                 :
                 loggedUserFriends.map((friend, i) => {
                     return <div key={i} className="border-bottom p-3 mb-1">
-                        <span className="h5">{friend}</span>
+                        <span className="h5">{friend.name + "#" + friend.region}</span>
                         <span className="float-right ml-2 mb-2">
-                            <button className="btn btn-sm btn-primary ml-3" onClick = {() => console.log("changed")}><i className="fa fa-search"></i></button>
+                            <button className="btn btn-sm btn-primary ml-3" onClick = {() => loadFriend(friend)}><i className="fa fa-search"></i></button>
                             <button className="btn btn-sm btn-danger ml-3" onClick = {() => removeFriend(friend)}><i className="fa fa-close"></i></button>
                         </span>
                     </div>
