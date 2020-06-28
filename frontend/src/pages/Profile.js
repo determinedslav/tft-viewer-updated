@@ -137,6 +137,7 @@ const Profile = () => {
 
     const removeFriend = async (friend) => {
         try{
+            delete friend.__typename;
             const response = await service.removeFriend(loggedUser.email, friend);
             if(response && response.hasOwnProperty('data')){
                 console.log(response)
