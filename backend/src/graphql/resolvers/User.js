@@ -39,6 +39,7 @@ export default {
             }
             return response;
         },
+        /*
         currentUser: async (root, args, {user}) => {
             if(!user){
                 throw new ValidationError([{
@@ -48,6 +49,7 @@ export default {
             }
             return await User.findById(user._id);   
         }
+        */
     },
     Mutation: {
         addUser: async (root, {username, email, password}) => {
@@ -116,14 +118,14 @@ export default {
             */
 
         },
-        addFriend: async (root, {email, friend}) => {
-            const user = await User.findOne({email});
+        addFriend: async (root, {_id, friend}) => {
+            const user = await User.findOne({_id});
             user.friends.forEach(element => {
                 if(element===friend){
                     throw new Error(`Friend already exists`);
                 }
             });
-            const response = await User.findOneAndUpdate({email}, {$push: {
+            const response = await User.findOneAndUpdate({_id}, {$push: {
                 friends: friend, 
             }}, {new: true}).exec();
             if(!response){
@@ -132,8 +134,8 @@ export default {
             return response;
             
         },
-        removeFriend: async (root, {email, friend}) => {
-            const response = await User.findOneAndUpdate({email}, {$pull: {
+        removeFriend: async (root, {_id, friend}) => {
+            const response = await User.findOneAndUpdate({_id}, {$pull: {
                 friends: friend, 
             }}, {new: true}).exec();
             if(!response){
@@ -142,6 +144,7 @@ export default {
             return response;
             
         },
+        /*
         login: async(root, {email, password}) => {
             const user = await User.findOne({email});
             if(!user){
@@ -165,38 +168,39 @@ export default {
                 }
             )
         },
-        deleteUser: async (root, {email}) => {
-            const user = await User.findOne({email})
+        */
+        deleteUser: async (root, {_id}) => {
+            const user = await User.findOne({_id})
             if(!user){
-                throw new Error(`Cannot find user with email: ${email}`)
+                throw new Error(`Cannot find user`)
             }
             const response = await user.remove(user)
             if(!response){
-                throw new Error(`Cannot delete user: ${email}`);
+                throw new Error(`Cannot delete user`);
             }
             return response;
         },
-        editUserUsername: async (root, {email, username}) => {
-            const response = await User.findOneAndUpdate({email}, {$set: {
+        editUserUsername: async (root, {_id, username}) => {
+            const response = await User.findOneAndUpdate({_id}, {$set: {
                 username, 
             }}, {new: true}).exec();
             if(!response){
-                throw new Error(`Cannot save username: ${email}`);
+                throw new Error(`Cannot save username:`);
             }
             return response;
         },
-        editUserPassword: async (root, {email, oldPassword, password}) => {
+        editUserPassword: async (root, {_id, oldPassword, password}) => {
 
             let errors = [];
             
-            const user = await User.findOne({email});
+            const user = await User.findOne({_id});
             if(!user){
-                throw new Error(`Cannot find user with email: ${email}`)
+                throw new Error(`Cannot find user`)
             }
 
             const comparePass = await bcrypt.compare(oldPassword, user.password);
             if(!comparePass){
-                throw new Error(`Cannot match password for email: ${email}`)
+                throw new Error(`Cannot match password`)
             }
 
             const compareNewPass = await bcrypt.compare(password, user.password);
@@ -215,11 +219,11 @@ export default {
                 throw new ValidationError(errors);
             }
 
-            const response = await User.findOneAndUpdate({email}, {$set: {
+            const response = await User.findOneAndUpdate({_id}, {$set: {
                 password: await bcrypt.hash(password, 10), 
             }}, {new: true}).exec();
             if(!response){
-                throw new Error(`Cannot save password: ${email}`);
+                throw new Error(`Cannot save password`);
             }
             return response;
         }

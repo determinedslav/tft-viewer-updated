@@ -22,17 +22,15 @@ export default `
         user(username: String!): User
         users: [User]
         login(email: String!, password: String!): User
-        currentUser: User
     }
 
     type Mutation {
         addUser(username: String!, email: String!, password: String!): User
-        addFriend(email: String!, friend: RiotAccoutInput!): User
-        login(email: String!, password: String!): String
-        deleteUser(email: String!): User
-        removeFriend(email: String!, friend: RiotAccoutInput!): User
-        editUserUsername(email: String!, username: String!): User
-        editUserPassword(email: String!, oldPassword: String!, password: String!): User
+        addFriend(_id: String!, friend: RiotAccoutInput!): User
+        deleteUser(_id: String!): User
+        removeFriend(_id: String!, friend: RiotAccoutInput!): User
+        editUserUsername(_id: String!, username: String!): User
+        editUserPassword(_id: String!, oldPassword: String!, password: String!): User
     }
 
 `
