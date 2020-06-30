@@ -2,7 +2,14 @@ import React, {useState} from 'react';
 import {useSelector, useDispatch} from "react-redux";
 import { useHistory } from "react-router-dom";
 import LoadingSplash from '../components/LoadingSplash';
+import DynamicSort from '../components/js/DynamicSort';
+import {setStats} from '../redux/actions/stats';
+import {setPlayer} from '../redux/actions/player';
+import {setLoading} from '../redux/actions/loading';
+import {setMatch} from '../redux/actions/match';
+import {setMatchIndex} from '../redux/actions/matchIndex';
 import {setLoggedUser} from '../redux/actions/loggedUser';
+import RiotAPIManager from '../network/riot-api';
 import service from "../network/graphql-service";
 
 const Profile = () => {
@@ -18,10 +25,13 @@ const Profile = () => {
     const [errorMessagePass, setErrorMessagePass] = useState(' ');
     const [confMessagePass, setConfMessagePass] = useState(' ');
     const [errorMessageDel, setErrorMessageDel] = useState(' ');
+    const [errorMessageFriend, setErrorMessageFriend] = useState(' ');
     const [deleteCheck, SetDeleteCheck] = useState(false);
 
     const loggedUser = useSelector(state => state.loggedUser);
     const loggedUserFriends = useSelector(state => state.loggedUser.friends);
+
+    const isLoading = useSelector(state => state.loading);
 
     const dispatch = useDispatch();
     const history = useHistory();
@@ -44,10 +54,47 @@ const Profile = () => {
         history.push('/')
     }
 
-    const loadFriend = (friend) => {
+    const getRegionCode = (value) => {
+        switch(value) {
+            case 'EUNE':
+                return'eun1';
+            case 'EUW':
+                return'euw1';
+            default:
+              return 'Error';
+          }
+    };
 
+    const loadFriend = async (friend) => {
+        setErrorMessageFriend(" ");
+        const regionCode = getRegionCode(friend.region);
+        dispatch(setLoading(true));
+        const responsePlayer = await RiotAPIManager.getPlayer(friend.name, regionCode, friend.region);
+        if(responsePlayer && responsePlayer.hasOwnProperty('newPlayer')){
+            dispatch(setPlayer(responsePlayer.newPlayer));
+            dispatch(setStats(responsePlayer.newStats));
+            const responseMatches = await RiotAPIManager.getMatches(responsePlayer.newPlayer);
+            handleMatches(responseMatches);
+        } else {
+            setErrorMessageFriend(responsePlayer);
+            dispatch(setLoading(false));
+        }
     }
 
+    const handleMatches = (matches) => {
+        setTimeout(()=>{
+            if (matches.length !== 0) {
+                matches.sort(DynamicSort.sortMatches("dateTime"));
+                console.log(matches);
+                dispatch(setMatch(matches));
+                dispatch(setMatchIndex(' '));
+                history.push('/match');
+            }
+            dispatch(setLoading(false));
+        },2000); 
+    }
+
+    //validations
     const validateUsername = () => {
         if (username === ' ') {
             return;
@@ -81,6 +128,7 @@ const Profile = () => {
         }
     }
 
+    //GraphQL requests
     const editUserUsername = async () => {
         try{
             const response = await service.editUserUsername(loggedUser.email, username);
@@ -145,13 +193,14 @@ const Profile = () => {
                 user.friends = response.data.removeFriend.friends;
                 dispatch(setLoggedUser(user))
             } else {
-                console.log("error");
+                setErrorMessageFriend("An error has occured while trying to remove saved account");
             }
         } catch (error){
-            console.log(error);
+            setErrorMessageFriend("An error has occured while trying to remove saved account");
         }
     }
 
+    //pages render
     const profile = () => {
         return <div>
             {loggedUser.savedAccount === undefined ?
@@ -236,8 +285,14 @@ const Profile = () => {
 
     const players = () => {
         return <div>
+            {isLoading ? 
+            <LoadingSplash message="Loading..."></LoadingSplash>
+            :
             <div className="row">
                 <div className="col">
+                    <div className="p-1 m-1 text-danger small" id="errMessage">
+                        {errorMessageFriend}
+                    </div>
                 {loggedUserFriends.length === 0 ?
                 <div className="mt-3 mb-3">You don't have any players saved to your account</div>
                 :
@@ -252,6 +307,7 @@ const Profile = () => {
                 })}
                 </div>
             </div>
+            }
         </div>
     }
 
