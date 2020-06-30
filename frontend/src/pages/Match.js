@@ -2,7 +2,7 @@ import React from 'react';
 import {useSelector, useDispatch} from "react-redux";
 import {useHistory} from "react-router-dom";
 import LoadingSplash from '../components/LoadingSplash'
-import PlayerCard from '../components/PlayerCard'
+import PlayerCard from '../components/PlayerCard';
 import {setMatchIndex} from '../redux/actions/matchIndex';
 import '../assets/css/tiers.css';
 
