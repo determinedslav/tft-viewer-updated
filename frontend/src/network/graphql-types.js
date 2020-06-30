@@ -1,14 +1,10 @@
 import gql from 'graphql-tag';
 
 export default {
-GET_USERS: gql`
-    query{users{username, email}}
-`,
-
 GET_USER: gql`
     query Login($email: String!, $password: String!) {
         login(email: $email, password: $password) {
-            username, email, friends{name, region}
+            _id, username, email, friends{name, region}
         }
     }
 `,
@@ -16,38 +12,38 @@ GET_USER: gql`
 ADD_USER: gql`
     mutation AddUser($email: String!, $username: String!, $password: String!) {
         addUser(email: $email, username: $username, password: $password) {
-            username, email, friends{name, region}
+            _id, username, email, friends{name, region}
         }
     }
 `,
 
 EDIT_USER_USERNAME: gql`
-    mutation EditUserUsername($email: String!, $username: String!) {
-        editUserUsername(email: $email, username: $username){username}
+    mutation EditUserUsername($_id: String!, $username: String!) {
+        editUserUsername(_id: $_id, username: $username){username}
     }
 `,
 
 EDIT_USER_PASSWORD: gql`
-    mutation EditUserPassword($email: String!, $oldPassword: String!, $password: String!) {
-        editUserPassword(email: $email, oldPassword: $oldPassword, password: $password){username}
+    mutation EditUserPassword($_id: String!, $oldPassword: String!, $password: String!) {
+        editUserPassword(_id: $_id, oldPassword: $oldPassword, password: $password){username}
     }
 `,
 
 ADD_FRIEND: gql`
-    mutation AddFriend($email: String!, $friend: RiotAccoutInput!) {
-        addFriend(email: $email, friend: $friend){friends{name, region}}
+    mutation AddFriend($_id: String!, $friend: RiotAccoutInput!) {
+        addFriend(_id: $_id, friend: $friend){friends{name, region}}
     }
 `,
 
 REMOVE_FRIEND: gql`
-    mutation RemoveFriend($email: String!, $friend: RiotAccoutInput!) {
-        removeFriend(email: $email, friend: $friend){friends{name, region}}
+    mutation RemoveFriend($_id: String!, $friend: RiotAccoutInput!) {
+        removeFriend(_id: $_id, friend: $friend){friends{name, region}}
     }
 `,
 
 DELETE_USER: gql`
-    mutation DeleteUser($email: String!){
-        deleteUser(email: $email){username}
+    mutation DeleteUser($_id: String!){
+        deleteUser(_id: $_id){username}
     }
 `,
 }

@@ -30,7 +30,7 @@ const Login = () => {
             const response = await service.getUser(email, password);
             if(response && response.hasOwnProperty('data')){
                 console.log(response)
-                const user = {username: response.data.login.username, email: response.data.login.email, friends: response.data.login.friends};
+                const user = {id: response.data.login._id, username: response.data.login.username, email: response.data.login.email, friends: response.data.login.friends};
                 dispatch(setLoggedUser(user))
                 history.push('/profile');
             } else {

@@ -132,7 +132,8 @@ const Profile = () => {
     //GraphQL requests
     const editUserUsername = async () => {
         try{
-            const response = await service.editUserUsername(loggedUser.email, username);
+            console.log(loggedUser);
+            const response = await service.editUserUsername(loggedUser.id, username);
             if(response && response.hasOwnProperty('data')){
                 console.log(response)
                 setErrorMessageUser(" ")
@@ -153,7 +154,7 @@ const Profile = () => {
 
     const editUserPassword = async () => {
         try{
-            const response = await service.editUserPassword(loggedUser.email, password, newPassword);
+            const response = await service.editUserPassword(loggedUser.id, password, newPassword);
             if(response && response.hasOwnProperty('data')){
                 console.log(response)
                 setErrorMessagePass(" ");
@@ -171,7 +172,7 @@ const Profile = () => {
 
     const deleteUser = async () => {
         try{
-            const response = await service.deleteUser(loggedUser.email);
+            const response = await service.deleteUser(loggedUser.id);
             if(response && response.hasOwnProperty('data')){
                 console.log(response)
                 dispatch(setLoggedUser({}))
@@ -187,7 +188,7 @@ const Profile = () => {
     const removeFriend = async (friend) => {
         try{
             delete friend.__typename;
-            const response = await service.removeFriend(loggedUser.email, friend);
+            const response = await service.removeFriend(loggedUser.id, friend);
             if(response && response.hasOwnProperty('data')){
                 console.log(response)
                 let user = loggedUser;

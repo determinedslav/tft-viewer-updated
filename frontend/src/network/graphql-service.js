@@ -2,17 +2,6 @@ import client from "./apollo-client"
 import types from "./graphql-types"
 
 export default {
-    async getUsers() {
-        try {
-            const response = await client.query({
-                query: types.GET_USERS,
-            });
-            return response;
-        } catch (error) {
-            return error;
-        }
-    },
-
     async getUser(email, password) {
         try {
             const response = await client.query({
@@ -37,10 +26,10 @@ export default {
         }
     },
 
-    async editUserUsername(email, username) {
+    async editUserUsername(_id, username) {
         try {
             const response = await client.mutate({
-                variables: { email, username },
+                variables: { _id, username },
                 mutation: types.EDIT_USER_USERNAME,
             });
         return response;
@@ -49,10 +38,10 @@ export default {
         }
     },
 
-    async editUserPassword(email, oldPassword, password) {
+    async editUserPassword(_id, oldPassword, password) {
         try {
             const response = await client.mutate({
-                variables: { email, oldPassword, password },
+                variables: { _id, oldPassword, password },
                 mutation: types.EDIT_USER_PASSWORD,
             });
         return response;
@@ -61,10 +50,10 @@ export default {
         }
     },
 
-    async addFriend(email, friend) {
+    async addFriend(_id, friend) {
         try {
             const response = await client.mutate({
-                variables: { email, friend },
+                variables: { _id, friend },
                 mutation: types.ADD_FRIEND,
             });
         return response;
@@ -73,10 +62,10 @@ export default {
         }
     },
 
-    async removeFriend(email, friend) {
+    async removeFriend(_id, friend) {
         try {
             const response = await client.mutate({
-                variables: { email, friend },
+                variables: { _id, friend },
                 mutation: types.REMOVE_FRIEND,
             });
         return response;
@@ -85,10 +74,10 @@ export default {
         }
     },
 
-    async deleteUser(email) {
+    async deleteUser(_id) {
         try {
         const response = await client.mutate({
-            variables: { email },
+            variables: { _id },
             mutation: types.DELETE_USER,
         });
         return response;
