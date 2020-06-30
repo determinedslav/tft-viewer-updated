@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {useSelector, useDispatch} from "react-redux";
 import { useHistory } from "react-router-dom";
 import LoadingSplash from '../components/LoadingSplash';
+import PlayerCard from '../components/PlayerCard';
 import DynamicSort from '../components/js/DynamicSort';
 import {setStats} from '../redux/actions/stats';
 import {setPlayer} from '../redux/actions/player';
@@ -247,35 +248,18 @@ const Profile = () => {
                 </div>
                 <div className="row justify-content-center">
                     <div className="col-md-5 col-sm-7 col-9">
-                        <div className="p-2 mb-3 bg-white border rounded">
-                            <div className="text-center">
-                                <div>
-                                    <span className="font-weight-bold">BlackHeart</span>
-                                    <span className="text-muted">#EUNE</span>								
-                                </div>
-                                <div className="font-weight-bold">
-                                    lvl&nbsp;123
-                                </div>
-                                <div>
-                                    <img className="img-fluid float-center w-25 m-3" src= {"images/emblems/PLATINUM.PNG"} alt="Ranked Emblem"/>
-                                </div>
-                                <div className="font-weight-bold">
-                                    PLATINUM&nbsp;IV&nbsp;0LP
-                                </div>
-                            </div>
-                            <div className="mt-3 p-2">
-                                <div className="text-center font-weight-bold mb-3 mt-2">Ranked statistics</div>
-                                <div className="border-bottom mb-2">
-                                    <span className="font-weight-bolder">Games played&nbsp;</span><span className="float-right">88</span>
-                                </div>
-                                <div className="border-bottom mb-2">
-                                    <span className="font-weight-bolder">Games won&nbsp;</span><span className="float-right">11</span>
-                                </div>
-                                <div className="border-bottom mb-2">
-                                    <span className="font-weight-bolder">Win rate&nbsp;</span><span className="float-right">12%</span>
-                                </div>
-                            </div>
-                        </div>
+                        <PlayerCard 
+                            //name={player.name} 
+                            //region={player.region} 
+                            //level={player.level} 
+                            //rank={stats.rank} 
+                            //division={stats.division}
+                            //lp={stats.lp}
+                            //played={stats.played}
+                            //wins={stats.wins}
+                            //ratio={(((stats.wins/stats.played) * 100).toFixed(2))}
+                            >                           
+                        </PlayerCard>
                     </div>
                 </div>
             </div>
