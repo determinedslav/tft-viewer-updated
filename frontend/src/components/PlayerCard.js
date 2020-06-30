@@ -11,7 +11,7 @@ const PlayerCard = props=> {
 
     const addFriend = async () => {
         try{
-            const friend = props.name + "#" + props.region;
+            const friend = {name: props.name, region: props.region}
             const response = await service.addFriend(loggedUser.email, friend);
             if(response && response.hasOwnProperty('data')){
                 console.log(response)
