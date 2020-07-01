@@ -17,6 +17,14 @@ const UserSchema = new Schema({
         type: String,
         required: true
     },
+    account: {
+        name: {
+            type: String, 
+        }, 
+        region: {
+            type: String, 
+        }
+    },
     friends: [{
         name: {
             type: String, 

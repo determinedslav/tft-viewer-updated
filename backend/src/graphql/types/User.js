@@ -15,6 +15,7 @@ export default `
         username: String!
         email: String!
         password: String!
+        account: RiotAccout
         friends: [RiotAccout]
     }
 
@@ -27,6 +28,7 @@ export default `
     type Mutation {
         addUser(username: String!, email: String!, password: String!): User
         addFriend(_id: String!, friend: RiotAccoutInput!): User
+        addAccount(_id: String!, account: RiotAccoutInput!): User
         deleteUser(_id: String!): User
         removeFriend(_id: String!, friend: RiotAccoutInput!): User
         editUserUsername(_id: String!, username: String!): User

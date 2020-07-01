@@ -52,7 +52,7 @@ export default {
         */
     },
     Mutation: {
-        addUser: async (root, {username, email, password}) => {
+        addUser: async (root, {username, email, password, testfield}) => {
 
             let errors = [];
             
@@ -82,7 +82,8 @@ export default {
             }
 
             const newUser = await new User({
-                username, 
+                username,
+                testfield, 
                 email, 
                 password: await bcrypt.hash(password, 10)
             });
@@ -117,6 +118,15 @@ export default {
             });
             */
 
+        },
+        addAccount: async (root, {_id, account}) => {
+            const response = await User.findOneAndUpdate({_id}, {$set: {
+                account, 
+            }}, {new: true}).exec();
+            if(!response){
+                throw new Error(`Cannot save username:`);
+            }
+            return response;
         },
         addFriend: async (root, {_id, friend}) => {
             const user = await User.findOne({_id});
