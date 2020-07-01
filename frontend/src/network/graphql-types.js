@@ -17,6 +17,12 @@ ADD_USER: gql`
     }
 `,
 
+ADD_ACCOUNT: gql`
+    mutation AddAccount($_id: String!, $account: RiotAccoutInput!) {
+        addAccount(_id: $_id, account: $account){account{name, region}}
+    }
+`,
+
 EDIT_USER_USERNAME: gql`
     mutation EditUserUsername($_id: String!, $username: String!) {
         editUserUsername(_id: $_id, username: $username){username}

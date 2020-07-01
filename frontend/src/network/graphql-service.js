@@ -26,6 +26,18 @@ export default {
         }
     },
 
+    async addAccount(_id, account) {
+        try {
+            const response = await client.mutate({
+                variables: { _id, account },
+                mutation: types.ADD_ACCOUNT,
+            });
+        return response;
+        } catch (error) {
+            return error;
+        }
+    },
+
     async editUserUsername(_id, username) {
         try {
             const response = await client.mutate({

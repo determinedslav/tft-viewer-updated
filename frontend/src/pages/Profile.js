@@ -17,6 +17,8 @@ const Profile = () => {
 
     const [selectedTab, setSelectedTab] = useState('Profile');
 
+    const [accountName, setAccountName] = useState(' ');
+    const [accountRegion, setAccountRegion] = useState(' ');
     const [username, setUsername] = useState(' ');
     const [password, setPassword] = useState(' ');
     const [newPassword, setNewPassword] = useState(' ');
@@ -66,19 +68,41 @@ const Profile = () => {
           }
     };
 
+    const findAccount = async ()=> {
+        try{
+            const regionCode = getRegionCode(accountRegion);
+            const responsePlayer = await RiotAPIManager.getPlayer(accountName, regionCode, accountRegion);
+            if(responsePlayer && responsePlayer.hasOwnProperty('newPlayer')){
+                const account = {name: accountName, region: accountRegion}
+                const response = await service.addAccount(loggedUser.id, account);
+                if(response && response.hasOwnProperty('data')){
+                    console.log(response)
+                } else {
+                    console.log("error");
+                }
+            } 
+        } catch (error){
+            setErrorMessageFriend("error");
+        }
+    };
+
     const loadFriend = async (friend) => {
-        setErrorMessageFriend(" ");
-        const regionCode = getRegionCode(friend.region);
-        dispatch(setLoading(true));
-        const responsePlayer = await RiotAPIManager.getPlayer(friend.name, regionCode, friend.region);
-        if(responsePlayer && responsePlayer.hasOwnProperty('newPlayer')){
-            dispatch(setPlayer(responsePlayer.newPlayer));
-            dispatch(setStats(responsePlayer.newStats));
-            const responseMatches = await RiotAPIManager.getMatches(responsePlayer.newPlayer);
-            handleMatches(responseMatches);
-        } else {
-            setErrorMessageFriend(responsePlayer);
-            dispatch(setLoading(false));
+        try{
+            setErrorMessageFriend(" ");
+            const regionCode = getRegionCode(friend.region);
+            dispatch(setLoading(true));
+            const responsePlayer = await RiotAPIManager.getPlayer(friend.name, regionCode, friend.region);
+            if(responsePlayer && responsePlayer.hasOwnProperty('newPlayer')){
+                dispatch(setPlayer(responsePlayer.newPlayer));
+                dispatch(setStats(responsePlayer.newStats));
+                const responseMatches = await RiotAPIManager.getMatches(responsePlayer.newPlayer);
+                handleMatches(responseMatches);
+            } else {
+                setErrorMessageFriend(responsePlayer);
+                dispatch(setLoading(false));
+            }
+        } catch (error){
+            setErrorMessageFriend("error");
         }
     }
 
@@ -212,13 +236,13 @@ const Profile = () => {
                         <div className="mb-3">Save Your League Account</div>
                         <div className="row p-2">
                             <div className="col-md-8">
-                                <input type="text" className="form-control mt-2" id="user" placeholder="Username"  required/>
+                                <input type="text" className="form-control mt-2" id="user" placeholder="Username" onChange={e => setAccountName(e.target.value)}  required/>
                             </div>
                             <div className="col-md-4">
-                            <select id="selectRegion" defaultValue = "0" className="form-control mt-2"  required>
+                            <select id="selectRegion" defaultValue = "0" className="form-control mt-2" onChange={e => setAccountRegion(e.target.value)} required>
                                 <option value="0" disabled>Select region</option>
-                                <option value="eun1">EU Nordic and East</option>
-                                <option value="euw1">EU West</option>
+                                <option value="EUNE">EU Nordic and East</option>
+                                <option value="EUW">EU West</option>
                             </select>
                             </div>
                         </div>
@@ -229,7 +253,7 @@ const Profile = () => {
                                 </div>
                             </div>           
                             <div className="col-md-3 text-right">
-                                <button className="btn btn-primary"><i className="fa fa-search mr-1"></i>Search</button>
+                                <button className="btn btn-primary" onClick = {() => findAccount()}><i className="fa fa-search mr-1"></i>Search</button>
                             </div>
                         </div>
                     </form>
