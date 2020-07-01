@@ -131,7 +131,7 @@ export default {
         addFriend: async (root, {_id, friend}) => {
             const user = await User.findOne({_id});
             user.friends.forEach(element => {
-                if(element===friend){
+                if(element.name === friend.name && element.region === friend.region){
                     throw new Error(`Friend already exists`);
                 }
             });
