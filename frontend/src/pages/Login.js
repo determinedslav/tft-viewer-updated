@@ -31,6 +31,7 @@ const Login = () => {
             if(response && response.hasOwnProperty('data')){
                 console.log(response)
                 const user = {id: response.data.login._id, username: response.data.login.username, email: response.data.login.email, account: response.data.login.account , friends: response.data.login.friends};
+                console.log(user)
                 dispatch(setLoggedUser(user))
                 history.push('/profile');
             } else {

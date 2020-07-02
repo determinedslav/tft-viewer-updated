@@ -72,17 +72,18 @@ const Profile = () => {
         try{
             const regionCode = getRegionCode(accountRegion);
             const responsePlayer = await RiotAPIManager.getPlayer(accountName, regionCode, accountRegion);
+            console.log(responsePlayer);
             if(responsePlayer && responsePlayer.hasOwnProperty('newPlayer')){
                 const account = {
                     name: responsePlayer.newPlayer.name, 
                     region: responsePlayer.newPlayer.region,
                     level: responsePlayer.newPlayer.level,
-                    rank: responsePlayer.newStats.rank,
-                    division: responsePlayer.newStats.division,
-                    lp: responsePlayer.newStats.lp,
-                    wins: responsePlayer.newStats.wins,
-                    losses: responsePlayer.newStats.losses,
-                    played: responsePlayer.newStats.played,
+                    rank: responsePlayer.newStats[0].rank,
+                    division: responsePlayer.newStats[0].division,
+                    lp: responsePlayer.newStats[0].lp,
+                    wins: responsePlayer.newStats[0].wins,
+                    losses: responsePlayer.newStats[0].losses,
+                    played: responsePlayer.newStats[0].played,
                 }
                 const response = await service.addAccount(loggedUser.id, account);
                 if(response && response.hasOwnProperty('data')){
@@ -284,15 +285,15 @@ const Profile = () => {
                 <div className="row justify-content-center">
                     <div className="col-md-5 col-sm-7 col-9">
                         <PlayerCard 
-                            //name={player.name} 
-                            //region={player.region} 
-                            //level={player.level} 
-                            //rank={stats.rank} 
-                            //division={stats.division}
-                            //lp={stats.lp}
-                            //played={stats.played}
-                            //wins={stats.wins}
-                            //ratio={(((stats.wins/stats.played) * 100).toFixed(2))}
+                            name={loggedUser.account.name} 
+                            region={loggedUser.account.region} 
+                            level={loggedUser.account.level} 
+                            rank={loggedUser.account.rank} 
+                            division={loggedUser.account.division}
+                            lp={loggedUser.account.lp}
+                            played={loggedUser.account.played}
+                            wins={loggedUser.account.wins}
+                            ratio={(((loggedUser.account.wins/loggedUser.account.played) * 100).toFixed(2))}
                             button = "none"
                             >                           
                         </PlayerCard>
