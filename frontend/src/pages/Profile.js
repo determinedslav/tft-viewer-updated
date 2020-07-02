@@ -73,7 +73,17 @@ const Profile = () => {
             const regionCode = getRegionCode(accountRegion);
             const responsePlayer = await RiotAPIManager.getPlayer(accountName, regionCode, accountRegion);
             if(responsePlayer && responsePlayer.hasOwnProperty('newPlayer')){
-                const account = {name: accountName, region: accountRegion}
+                const account = {
+                    name: responsePlayer.newPlayer.name, 
+                    region: responsePlayer.newPlayer.region,
+                    level: responsePlayer.newPlayer.level,
+                    rank: responsePlayer.newStats.rank,
+                    division: responsePlayer.newStats.division,
+                    lp: responsePlayer.newStats.lp,
+                    wins: responsePlayer.newStats.wins,
+                    losses: responsePlayer.newStats.losses,
+                    played: responsePlayer.newStats.played,
+                }
                 const response = await service.addAccount(loggedUser.id, account);
                 if(response && response.hasOwnProperty('data')){
                     console.log(response)
@@ -229,7 +239,7 @@ const Profile = () => {
     //pages render
     const profile = () => {
         return <div>
-            {loggedUser.savedAccount === undefined ?
+            {loggedUser.account.name === null ?
             <div className="row mb-3">
                 <div className="col">
                     <form id="searchUser" onSubmit={(e) => e.preventDefault()}>
@@ -266,7 +276,7 @@ const Profile = () => {
                     <div className="col">
                         <div className="mb-3">Saved Account</div>
                         <div className="p-2">
-                            <div>{loggedUser.savedAccount} undefined</div>
+                            <div>{loggedUser.account.name + "#" + loggedUser.account.region}</div>
                             <button className="btn btn-primary mt-3 mb-4">Change</button>
                         </div>
                     </div>        
@@ -283,6 +293,7 @@ const Profile = () => {
                             //played={stats.played}
                             //wins={stats.wins}
                             //ratio={(((stats.wins/stats.played) * 100).toFixed(2))}
+                            button = "none"
                             >                           
                         </PlayerCard>
                     </div>
