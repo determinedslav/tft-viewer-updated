@@ -38,7 +38,7 @@ const Register = () => {
             const response = await service.addUser(email, username, password);
             if(response && response.hasOwnProperty('data')){
                 console.log(response)
-                const user = {id: response.data.login._id, username: response.data.login.username, email: response.data.login.email, account: response.data.login.account , friends: response.data.login.friends};
+                const user = {id: response.data.addUser._id, username: response.data.addUser.username, email: response.data.addUser.email, account: response.data.addUser.account , friends: response.data.addUser.friends};
                 dispatch(setLoggedUser(user))
                 history.push('/profile');
             } else {
