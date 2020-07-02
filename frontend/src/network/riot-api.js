@@ -26,7 +26,7 @@ async function getPlayer(name, region, regionFull){
                             rank: item.tier,
                             division: item.rank,
                             wins: item.wins,
-                            loses: item.losses,
+                            losses: item.losses,
                             played: item.wins + item.losses,
                             lp: item.leaguePoints,
                         }
