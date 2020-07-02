@@ -4,7 +4,7 @@ export default {
 GET_USER: gql`
     query Login($email: String!, $password: String!) {
         login(email: $email, password: $password) {
-            _id, username, email, friends{name, region}
+            _id, username, email, account{name, region}, friends{name, region}
         }
     }
 `,
@@ -12,7 +12,7 @@ GET_USER: gql`
 ADD_USER: gql`
     mutation AddUser($email: String!, $username: String!, $password: String!) {
         addUser(email: $email, username: $username, password: $password) {
-            _id, username, email, friends{name, region}
+            _id, username, email, account{name, region}, friends{name, region}
         }
     }
 `,
