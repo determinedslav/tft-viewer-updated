@@ -57,7 +57,7 @@ const PlayerCard = props=> {
             </div>
             {loggedUser.username !== undefined ? 
             <div className="text-center">
-                <button className="btn btn-primary" onClick = {() => addFriend()}>Save Player</button>
+                <button className={"btn btn-primary d-"+ props.button} onClick = {() => addFriend()}>Save Player</button>
             </div>
             :<div></div>}
         </div>
