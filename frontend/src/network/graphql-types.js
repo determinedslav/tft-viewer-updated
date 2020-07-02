@@ -4,7 +4,7 @@ export default {
 GET_USER: gql`
     query Login($email: String!, $password: String!) {
         login(email: $email, password: $password) {
-            _id, username, email, account{name, region}, friends{name, region}
+            _id, username, email, account{name, region, level, rank, division, lp, wins, losses, played}, friends{name, region}
         }
     }
 `,
@@ -12,13 +12,13 @@ GET_USER: gql`
 ADD_USER: gql`
     mutation AddUser($email: String!, $username: String!, $password: String!) {
         addUser(email: $email, username: $username, password: $password) {
-            _id, username, email, account{name, region}, friends{name, region}
+            _id, username, email, account{name, region, level, rank, division, lp, wins, losses, played}, friends{name, region}
         }
     }
 `,
 
 ADD_ACCOUNT: gql`
-    mutation AddAccount($_id: String!, $account: RiotAccoutInput!) {
+    mutation AddAccount($_id: String!, $account: AccountInput!) {
         addAccount(_id: $_id, account: $account){account{name, region}}
     }
 `,
@@ -36,13 +36,13 @@ EDIT_USER_PASSWORD: gql`
 `,
 
 ADD_FRIEND: gql`
-    mutation AddFriend($_id: String!, $friend: RiotAccoutInput!) {
+    mutation AddFriend($_id: String!, $friend: FriendInput!) {
         addFriend(_id: $_id, friend: $friend){friends{name, region}}
     }
 `,
 
 REMOVE_FRIEND: gql`
-    mutation RemoveFriend($_id: String!, $friend: RiotAccoutInput!) {
+    mutation RemoveFriend($_id: String!, $friend: FriendInput!) {
         removeFriend(_id: $_id, friend: $friend){friends{name, region}}
     }
 `,
