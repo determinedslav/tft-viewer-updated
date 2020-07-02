@@ -19,7 +19,14 @@ const UserSchema = new Schema({
     },
     account: {
         name: String, 
-        region: String
+        region: String,
+        level: Number,
+        rank: String,
+        division: String,
+        lp: Number,
+        wins: Number,
+        losses: Number,
+        played: Number
     },
     friends: [{
         name: {
