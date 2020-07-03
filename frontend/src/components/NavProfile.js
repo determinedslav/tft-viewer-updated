@@ -39,7 +39,7 @@ const NavProfile = props => {
     const logout = () => {
         dispatch(setLoggedUser({}))
         history.push('/')
-    }
+    };
 
     const getRegionCode = (value) => {
         switch(value) {
@@ -66,7 +66,7 @@ const NavProfile = props => {
                 dispatch(setLoading(false));
             }
         }
-    }
+    };
 
     const handleMatches = (matches) => {
         setTimeout(()=>{
@@ -79,21 +79,24 @@ const NavProfile = props => {
             }
             dispatch(setLoading(false));
         },2000); 
-    }
+    };
 
     return <div>
             {loggedUserUsername !== undefined ? 
             <div>
-                <div className="btn text-light">
-                    <span onClick = {() => redirect("profile")}><i className="fa fa-user mr-2"></i>{loggedUserUsername}</span><span onClick = {() => logout()}><i className="fa fa-sign-out ml-4"></i></span>
+                <div className="btn text-light d-inline">
+                    <span onClick = {() => redirect("profile")}><i className="fa fa-user mr-2"></i>{loggedUserUsername}</span>
                 </div>
-                <div className="text-light">
+                <div className="text-light d-inline">
                     <select id="selectFriend" defaultValue = "0" className="form-control-sm">
-                        <option value="0" disabled>Saved players</option>
+                        <option value="0" disabled>Saved player accounts</option>
                         {loggedUserFriends.map((friend, i) => {
                             return <option key={i} value={friend} onClick = {() => loadFriend(friend)}>{friend.name + "#" + friend.region}</option>
                         })}
                     </select>
+                </div>
+                <div className="btn text-light d-inline">
+                    <span onClick = {() => logout()}><i className="fa fa-sign-out ml-2"></i></span>
                 </div>
             </div> 
             :
