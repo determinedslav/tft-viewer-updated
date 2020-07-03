@@ -253,10 +253,15 @@ const Profile = () => {
             {isLoading ? 
             <LoadingSplash message="Loading..."></LoadingSplash>
             :
-            loggedUser.account.name === null || change === true ?
+            loggedUser.account.name === null || change ?
             <div className="row mb-3">
                 <div className="col">
                     <form id="searchUser" onSubmit={(e) => e.preventDefault()}>
+                        {change ? 
+                            <button className="btn btn-danger btn-sm mb-3" onClick = {() => setChange(false)}><i className="fa fa-close mr-1"></i>Cancel</button>
+                            :
+                            <span></span>
+                        }
                         <div className="mb-3">Save Your League Account</div>
                         <div className="row p-2">
                             <div className="col-md-8">
