@@ -23,6 +23,7 @@ const Profile = () => {
     const [password, setPassword] = useState(' ');
     const [newPassword, setNewPassword] = useState(' ');
     const [confNewPassword, setConfNewPassword] = useState(' ');
+    const [change, setChange] = useState(false)
     const [errorMessageAccount, setErrorMessageAccount] = useState(' ');
     const [errorMessageUser, setErrorMessageUser] = useState(' ');
     const [confMessageUser, setConfMessageUser] = useState(' ');
@@ -102,6 +103,7 @@ const Profile = () => {
                 let user = loggedUser;
                 user.account = account;
                 dispatch(setLoggedUser(user))
+                setChange(false);
                 dispatch(setLoading(false));
             } else {
                 setErrorMessageAccount(responsePlayer);
@@ -252,7 +254,7 @@ const Profile = () => {
             {isLoading ? 
             <LoadingSplash message="Loading..."></LoadingSplash>
             :
-            loggedUser.account.name === null ?
+            loggedUser.account.name === null || change === true ?
             <div className="row mb-3">
                 <div className="col">
                     <form id="searchUser" onSubmit={(e) => e.preventDefault()}>
@@ -289,7 +291,7 @@ const Profile = () => {
                     <div className="col-md-5 col-sm-7 col-9">
                         <div className="row p-2">
                             <div className="col-6">
-                                <button className="btn btn-primary" onClick = {() => findAccount(loggedUser.account.name, loggedUser.account.region)}>Change</button>
+                                <button className="btn btn-primary" onClick = {() => setChange(true)}>Change</button>
                             </div>
                             <div className="col-6 text-right">
                                 <button className="btn btn-primary" onClick = {() => findAccount(loggedUser.account.name, loggedUser.account.region)}>Update</button>
