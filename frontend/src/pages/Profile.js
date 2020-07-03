@@ -23,6 +23,7 @@ const Profile = () => {
     const [password, setPassword] = useState(' ');
     const [newPassword, setNewPassword] = useState(' ');
     const [confNewPassword, setConfNewPassword] = useState(' ');
+    const [errorMessageAccount, setErrorMessageAccount] = useState(' ');
     const [errorMessageUser, setErrorMessageUser] = useState(' ');
     const [confMessageUser, setConfMessageUser] = useState(' ');
     const [errorMessagePass, setErrorMessagePass] = useState(' ');
@@ -68,52 +69,60 @@ const Profile = () => {
           }
     };
 
-    const findAccount = async ()=> {
-        try{
-            const regionCode = getRegionCode(accountRegion);
-            const responsePlayer = await RiotAPIManager.getPlayer(accountName, regionCode, accountRegion);
-            console.log(responsePlayer);
-            if(responsePlayer && responsePlayer.hasOwnProperty('newPlayer')){
-                const account = {
-                    name: responsePlayer.newPlayer.name, 
-                    region: responsePlayer.newPlayer.region,
-                    level: responsePlayer.newPlayer.level,
-                    rank: responsePlayer.newStats[0].rank,
-                    division: responsePlayer.newStats[0].division,
-                    lp: responsePlayer.newStats[0].lp,
-                    wins: responsePlayer.newStats[0].wins,
-                    losses: responsePlayer.newStats[0].losses,
-                    played: responsePlayer.newStats[0].played,
-                }
-                const response = await service.addAccount(loggedUser.id, account);
-                if(response && response.hasOwnProperty('data')){
-                    console.log(response)
-                } else {
-                    console.log("error");
-                }
-            } 
-        } catch (error){
-            setErrorMessageFriend("error");
+    const validateAccount = (name, region) => {
+        if (name === ' ' || region === ' ') {
+            return;
+        } else if (name.length < 4 || name.length > 16) {
+            setErrorMessageAccount("Summoner names are between 4 and 16 symbols long");
+        } else {
+            findAccount(name, region);
         }
+    }
+
+    const findAccount = async (name, region)=> {
+        dispatch(setLoading(true));
+        setErrorMessageAccount(" ");
+        const regionCode = getRegionCode(region);
+        const responsePlayer = await RiotAPIManager.getPlayer(name, regionCode, region);
+        console.log(responsePlayer);
+        if(responsePlayer && responsePlayer.hasOwnProperty('newPlayer')){
+            const account = {
+                name: responsePlayer.newPlayer.name, 
+                region: responsePlayer.newPlayer.region,
+                level: responsePlayer.newPlayer.level,
+                rank: responsePlayer.newStats[0].rank,
+                division: responsePlayer.newStats[0].division,
+                lp: responsePlayer.newStats[0].lp,
+                wins: responsePlayer.newStats[0].wins,
+                losses: responsePlayer.newStats[0].losses,
+                played: responsePlayer.newStats[0].played,
+            }
+            const response = await service.addAccount(loggedUser.id, account);
+            if(response && response.hasOwnProperty('data')){
+                let user = loggedUser;
+                user.account = account;
+                dispatch(setLoggedUser(user))
+                dispatch(setLoading(false));
+            } else {
+                setErrorMessageAccount(responsePlayer);
+                dispatch(setLoading(false));
+            }
+        } 
     };
 
     const loadFriend = async (friend) => {
-        try{
-            setErrorMessageFriend(" ");
-            const regionCode = getRegionCode(friend.region);
-            dispatch(setLoading(true));
-            const responsePlayer = await RiotAPIManager.getPlayer(friend.name, regionCode, friend.region);
-            if(responsePlayer && responsePlayer.hasOwnProperty('newPlayer')){
-                dispatch(setPlayer(responsePlayer.newPlayer));
-                dispatch(setStats(responsePlayer.newStats));
-                const responseMatches = await RiotAPIManager.getMatches(responsePlayer.newPlayer);
-                handleMatches(responseMatches);
-            } else {
-                setErrorMessageFriend(responsePlayer);
-                dispatch(setLoading(false));
-            }
-        } catch (error){
-            setErrorMessageFriend("error");
+        dispatch(setLoading(true));
+        setErrorMessageFriend(" ");
+        const regionCode = getRegionCode(friend.region);
+        const responsePlayer = await RiotAPIManager.getPlayer(friend.name, regionCode, friend.region);
+        if(responsePlayer && responsePlayer.hasOwnProperty('newPlayer')){
+            dispatch(setPlayer(responsePlayer.newPlayer));
+            dispatch(setStats(responsePlayer.newStats));
+            const responseMatches = await RiotAPIManager.getMatches(responsePlayer.newPlayer);
+            handleMatches(responseMatches);
+        } else {
+            setErrorMessageFriend(responsePlayer);
+            dispatch(setLoading(false));
         }
     }
 
@@ -240,7 +249,10 @@ const Profile = () => {
     //pages render
     const profile = () => {
         return <div>
-            {loggedUser.account.name === null ?
+            {isLoading ? 
+            <LoadingSplash message="Loading..."></LoadingSplash>
+            :
+            loggedUser.account.name === null ?
             <div className="row mb-3">
                 <div className="col">
                     <form id="searchUser" onSubmit={(e) => e.preventDefault()}>
@@ -260,11 +272,11 @@ const Profile = () => {
                         <div className="row p-2">
                             <div className="col-md-9">
                                 <div className="p-1 m-1 text-danger small" id="errMessage">
-                                    errorMessage
+                                    {errorMessageAccount}
                                 </div>
                             </div>           
                             <div className="col-md-3 text-right">
-                                <button className="btn btn-primary" onClick = {() => findAccount()}><i className="fa fa-search mr-1"></i>Search</button>
+                                <button className="btn btn-primary" onClick = {() => validateAccount(accountName, accountRegion)}><i className="fa fa-search mr-1"></i>Search</button>
                             </div>
                         </div>
                     </form>
@@ -273,17 +285,16 @@ const Profile = () => {
 
             :
             <div>
-                <div className = "row mt-4">
-                    <div className="col">
-                        <div className="mb-3">Saved Account</div>
-                        <div className="p-2">
-                            <div>{loggedUser.account.name + "#" + loggedUser.account.region}</div>
-                            <button className="btn btn-primary mt-3 mb-4">Change</button>
-                        </div>
-                    </div>        
-                </div>
                 <div className="row justify-content-center">
                     <div className="col-md-5 col-sm-7 col-9">
+                        <div className="row p-2">
+                            <div className="col-6">
+                                <button className="btn btn-primary" onClick = {() => findAccount(loggedUser.account.name, loggedUser.account.region)}>Change</button>
+                            </div>
+                            <div className="col-6 text-right">
+                                <button className="btn btn-primary" onClick = {() => findAccount(loggedUser.account.name, loggedUser.account.region)}>Update</button>
+                            </div>
+                        </div>
                         <PlayerCard 
                             name={loggedUser.account.name} 
                             region={loggedUser.account.region} 
