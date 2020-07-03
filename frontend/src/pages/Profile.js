@@ -104,12 +104,11 @@ const Profile = () => {
                 user.account = account;
                 dispatch(setLoggedUser(user))
                 setChange(false);
-                dispatch(setLoading(false));
             } else {
                 setErrorMessageAccount(responsePlayer);
-                dispatch(setLoading(false));
             }
-        } 
+        }
+        dispatch(setLoading(false)); 
     };
 
     const loadFriend = async (friend) => {
