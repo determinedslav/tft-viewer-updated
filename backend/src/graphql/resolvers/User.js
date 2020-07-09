@@ -2,8 +2,6 @@ import User from "../../models/User";
 
 // bcrypt is used to crypt passwords
 import bcrypt from "bcrypt";
-// jsonwebtoken is used for authentication
-import jsonwebtoken from "jsonwebtoken";
 
 // validator is used for validating fields and handling custom errors with ValidationError
 import validator from 'validator';
@@ -39,17 +37,6 @@ export default {
             }
             return response;
         },
-        /*
-        currentUser: async (root, args, {user}) => {
-            if(!user){
-                throw new ValidationError([{
-                    key: 'user',
-                    message: 'user_not_authenticated',
-                }])
-            }
-            return await User.findById(user._id);   
-        }
-        */
     },
     Mutation: {
         addUser: async (root, {username, email, password, testfield}) => {
@@ -107,17 +94,6 @@ export default {
                 return new Error(`Cannot find user with email: ${email}`)
             }
             return response;
-            /*
-            return jsonwebtoken.sign({
-                    _id: newUser._id,
-                    email: newUser.email,
-                },
-                process.env.JWT_SECRET,
-                {
-                    expiresIn: '1d'
-            });
-            */
-
         },
         addAccount: async (root, {_id, account}) => {
             const response = await User.findOneAndUpdate({_id}, {$set: {
@@ -154,31 +130,6 @@ export default {
             return response;
             
         },
-        /*
-        login: async(root, {email, password}) => {
-            const user = await User.findOne({email});
-            if(!user){
-                throw new Error(`Cannot find user with email: ${email}`)
-            }
-
-            const valid = await bcrypt.compare(password, user.password);
-
-            if(!valid){
-                throw new Error(`Cannot match password for email: ${email}`)
-            }
-
-            return jsonwebtoken.sign(
-                {
-                    _id: user._id,
-                    email: user.email,
-                },
-                process.env.JWT_SECRET,
-                {
-                    expiresIn: '1d'
-                }
-            )
-        },
-        */
         deleteUser: async (root, {_id}) => {
             const user = await User.findOne({_id})
             if(!user){
