@@ -8,7 +8,7 @@ import {setPlayer} from '../redux/actions/player';
 import {setLoading} from '../redux/actions/loading';
 import {setMatch} from '../redux/actions/match';
 import {setMatchIndex} from '../redux/actions/matchIndex';
-import RiotAPIManager from '../network/riot-api';
+import RiotAPIManager from '../network/RiotAPI/riot-api';
 
 const Home = () => {    
 

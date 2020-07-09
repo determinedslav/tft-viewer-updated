@@ -1,5 +1,5 @@
-import API from '../constants/API';
-import Remote from '../remote';
+import API from '../constants/RiotAPI';
+import Remote from './remote';
 
 async function getPlayer(name, region, regionFull){
     try{

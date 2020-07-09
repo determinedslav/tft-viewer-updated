@@ -1,7 +1,7 @@
 import React from 'react';
 import {useSelector, useDispatch} from "react-redux";
 import {setLoggedUser} from '../redux/actions/loggedUser';
-import service from "../network/graphql-service";
+import service from "../network/GraphQL/graphql-service";
 
 const PlayerCard = props=> {
 

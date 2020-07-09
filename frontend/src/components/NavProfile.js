@@ -8,7 +8,7 @@ import {setLoading} from '../redux/actions/loading';
 import {setMatch} from '../redux/actions/match';
 import {setMatchIndex} from '../redux/actions/matchIndex';
 import {setLoggedUser} from '../redux/actions/loggedUser';
-import RiotAPIManager from '../network/riot-api';
+import RiotAPIManager from '../network/RiotAPI/riot-api';
 
 const NavProfile = props => {
 

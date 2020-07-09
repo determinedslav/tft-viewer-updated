@@ -10,8 +10,8 @@ import {setLoading} from '../redux/actions/loading';
 import {setMatch} from '../redux/actions/match';
 import {setMatchIndex} from '../redux/actions/matchIndex';
 import {setLoggedUser} from '../redux/actions/loggedUser';
-import RiotAPIManager from '../network/riot-api';
-import service from "../network/graphql-service";
+import RiotAPIManager from '../network/RiotAPI/riot-api';
+import service from "../network/GraphQL/graphql-service";
 
 const Profile = () => {
 

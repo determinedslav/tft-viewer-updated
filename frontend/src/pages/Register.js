@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {useDispatch} from "react-redux";
 import { useHistory } from "react-router-dom";
 import {setLoggedUser} from '../redux/actions/loggedUser';
-import service from "../network/graphql-service";
+import service from "../network/GraphQL/graphql-service";
 
 const Register = () => {
     
