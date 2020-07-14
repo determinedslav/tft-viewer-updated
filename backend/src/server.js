@@ -9,13 +9,6 @@ import ValidationError from './graphql/ValidationError';
 
 dotenv.config();
 
-import jwt from "express-jwt";
-
-const auth = jwt({
-    secret: process.env.JWT_SECRET,
-    credentialsRequired: false,
-})
-
 const app = express();
 
 const PORT = process.env.PORT || "4000";
@@ -37,7 +30,6 @@ app.use(
     "/graphql",
     cors(),
     bodyParser.json(),
-    auth,
     expressGraphQL( req => {
         return {
             schema,
