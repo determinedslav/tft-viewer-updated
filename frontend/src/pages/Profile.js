@@ -293,14 +293,6 @@ const Profile = () => {
             <div>
                 <div className="row justify-content-center">
                     <div className="col-md-5 col-sm-7 col-9">
-                        <div className="row p-2">
-                            <div className="col-6">
-                                <button className="btn btn-primary" onClick = {() => setChange(true)}>Change</button>
-                            </div>
-                            <div className="col-6 text-right">
-                                <button className="btn btn-primary" onClick = {() => findAccount(loggedUser.account.name, loggedUser.account.region)}>Update</button>
-                            </div>
-                        </div>
                         <PlayerCard 
                             name={loggedUser.account.name} 
                             region={loggedUser.account.region} 
@@ -314,6 +306,14 @@ const Profile = () => {
                             button = "none"
                             >                           
                         </PlayerCard>
+                        <div className="row p-2">
+                            <div className="col-6">
+                                <button className="btn btn-primary" onClick = {() => setChange(true)}>Change</button>
+                            </div>
+                            <div className="col-6 text-right">
+                                <button className="btn btn-primary" onClick = {() => findAccount(loggedUser.account.name, loggedUser.account.region)}>Update</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
