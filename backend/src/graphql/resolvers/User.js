@@ -39,7 +39,7 @@ export default {
         },
     },
     Mutation: {
-        addUser: async (root, {username, email, password, testfield}) => {
+        addUser: async (root, {username, email, password}) => {
 
             let errors = [];
             
@@ -69,8 +69,7 @@ export default {
             }
 
             const newUser = await new User({
-                username,
-                testfield, 
+                username, 
                 email, 
                 password: await bcrypt.hash(password, 10)
             });
